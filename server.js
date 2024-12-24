@@ -5,6 +5,7 @@ const fs = require('fs');
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const bitcoin = require('bitcoinjs-lib');
 
 dotenv.config();
 
@@ -37,6 +38,12 @@ app.post('/submit', limiter, (req, res) => {
     }
     console.log('Bitcoin Address:', bitcoinAddress);
     res.json({ message: 'Bitcoin address received' });
+});
+
+app.post('/create-bitcoin-address', (req, res) => {
+    const keyPair = bitcoin.ECPair.makeRandom();
+    const { address } = bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey });
+    res.json({ address });
 });
 
 https.createServer(sslOptions, app).listen(port, () => {
