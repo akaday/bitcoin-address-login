@@ -1,26 +1,15 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('bitcoin-address-form');
+function login() {
+  const address = document.getElementById('bitcoin-address').value;
+  if (validateBitcoinAddress(address)) {
+    // Proceed with login
+    alert('Login successful');
+  } else {
+    alert('Invalid Bitcoin address');
+  }
+}
 
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const bitcoinAddress = document.getElementById('bitcoin-address').value;
-        sendBitcoinAddress(bitcoinAddress);
-    });
-
-    function sendBitcoinAddress(address) {
-        fetch('/submit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ bitcoinAddress: address })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-    }
-});
+function validateBitcoinAddress(address) {
+  // Basic validation logic for Bitcoin addresses
+  const regex = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/;
+  return regex.test(address);
+}
